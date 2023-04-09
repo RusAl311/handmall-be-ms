@@ -1,0 +1,13 @@
+package com.handmall.hmsecurity;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class HmSecurityApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(HmSecurityApplication.class, args);
+	}
+
+}

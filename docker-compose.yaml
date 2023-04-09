@@ -1,0 +1,34 @@
+version: '3'
+services:
+  db-handmall-api:
+    image: postgres:12
+    restart: always
+    ports: 
+      - 5444:5432
+    networks:
+      - handmall-network
+    environment: 
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: handmall-main
+  db-hm-security:
+    image: postgres:12
+    restart: always
+    ports:
+      - 5454:5432
+    networks:
+      - handmall-network
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin567
+      POSTGRES_DB: hm-security
+  db-admin-handmall-api:
+    image: adminer
+    restart: always
+    ports:
+      - 8031:8080
+    networks:
+      - handmall-network
+  
+networks:
+  handmall-network:
