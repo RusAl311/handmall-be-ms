@@ -17,7 +17,7 @@ import com.handmall.handmallmain.services.DepartmentService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping(path = "api/v1/department")
+@RequestMapping(path = "api/v1/main/department")
 @RequiredArgsConstructor
 public class DepartmentController {
 

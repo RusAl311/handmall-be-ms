@@ -4,7 +4,13 @@ import com.handmall.hmsecurity.dtos.AuthenticationRequest;
 import com.handmall.hmsecurity.dtos.AuthenticationResponse;
 import com.handmall.hmsecurity.dtos.RegisterRequest;
 import com.handmall.hmsecurity.services.AuthenticationService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,5 +36,13 @@ public class AuthenticationController {
             @RequestBody AuthenticationRequest request
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(
+        HttpServletRequest request,
+        HttpServletResponse response
+    ) throws IOException {
+        authenticationService.refreshToken(request, response);
     }
 }

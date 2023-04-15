@@ -26,7 +26,7 @@ services:
     image: adminer
     restart: always
     ports:
-      - 8031:8080
+      - 8831:8080
     networks:
       - handmall-network
   

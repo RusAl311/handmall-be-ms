@@ -23,11 +23,19 @@ import lombok.RequiredArgsConstructor;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    protected void doFilterInternal(
+        HttpServletRequest request, 
+        HttpServletResponse response, 
+        FilterChain filterChain
+        ) throws ServletException, IOException {
+
+        if (request.getServletPath().contains("/api/v1/auth")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
@@ -44,18 +52,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails,
-                        null,
-                        userDetails.getAuthorities()
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
                 );
                 authToken.setDetails(
-                        new WebAuthenticationDetailsSource().buildDetails(request)
+                    new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         }
         filterChain.doFilter(request, response);
-        throw new UnsupportedOperationException("Unimplemented method 'doFilterInternal'");
     }
 
 }
