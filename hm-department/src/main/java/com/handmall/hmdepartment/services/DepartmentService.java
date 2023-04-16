@@ -1,21 +1,20 @@
-package com.handmall.handmallmain.services;
+package com.handmall.hmdepartment.services;
 
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
-import com.handmall.handmallmain.entities.Department;
-import com.handmall.handmallmain.repositories.DepartmentRepository;
+import com.handmall.hmdepartment.entities.Department;
+import com.handmall.hmdepartment.repositories.DepartmentRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class DepartmentService {
-
     private final DepartmentRepository departmentRepository;
-    
+
     public List<Department> getDepartments() {
         return departmentRepository.findAll();
     }
@@ -30,7 +29,7 @@ public class DepartmentService {
         departmentRepository.save(department);
     }
 
-    public void delete(Long departmentId) {
+    public void delete(Integer departmentId) {
         boolean exists = departmentRepository.existsById(departmentId);
         if (!exists) {
             throw new IllegalStateException("department with id " + departmentId + " does not exist");
@@ -49,7 +48,5 @@ public class DepartmentService {
         } else {
             throw new IllegalStateException("department with id " + department.getId() + " does not exist");
         }
-
     }
 }
-

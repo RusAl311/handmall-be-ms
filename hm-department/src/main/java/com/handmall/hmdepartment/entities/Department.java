@@ -1,4 +1,4 @@
-package com.handmall.handmallmain.entities;
+package com.handmall.hmdepartment.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,18 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 @Entity
 @Table
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 public class Department {
     @Id
     @SequenceGenerator(
@@ -30,6 +26,7 @@ public class Department {
         strategy = GenerationType.SEQUENCE, 
         generator = "department_sequence"
     )
-    private Long id;
+    private Integer id;
     private String name;
+    private String description;
 }
