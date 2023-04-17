@@ -1,5 +1,4 @@
 rootProject.name = 'handmall'
-include 'handmall-main'
 include 'hm-discovery'
 include 'hm-gateway'
 include 'hm-security'

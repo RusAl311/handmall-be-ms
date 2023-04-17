@@ -43,6 +43,14 @@ services:
       - 8831:8080
     networks:
       - handmall-network
+
+  hm-zipkin:
+    image: openzipkin/zipkin
+    restart: always
+    ports:
+      - 9411:9411
+    networks:
+      - handmall-network
   
 networks:
   handmall-network:

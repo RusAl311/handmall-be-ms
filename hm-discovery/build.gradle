@@ -18,6 +18,10 @@ ext {
 
 dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-server'
+	implementation 'org.springframework.boot:spring-boot-starter-actuator:3.0.5'
+	implementation 'io.micrometer:micrometer-observation:1.10.6'
+	implementation 'io.micrometer:micrometer-tracing-bridge-brave:1.0.4'
+	implementation 'io.zipkin.reporter2:zipkin-reporter-brave:2.16.3'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
