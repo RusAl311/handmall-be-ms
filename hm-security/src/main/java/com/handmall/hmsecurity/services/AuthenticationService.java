@@ -16,6 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,7 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) {
+		LocalDateTime now = LocalDateTime.now();
         var username = userRepository.findByEmail(request.getEmail());
         if (username.isPresent()){
             throw new IllegalStateException("username is exist");
@@ -55,10 +58,15 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
 				.refreshToken(refreshToken)
+				.username(savedUser.getUsername())
+				.role(savedUser.getRole())
+				.jwtExpiredAt(now.plus(86400000, ChronoUnit.MILLIS))
+				.refreshExpiredAt(now.plus(2629800000L, ChronoUnit.MILLIS))
                 .build();
     }
 
     public AuthenticationResponse authenticate (AuthenticationRequest request) {
+		LocalDateTime now = LocalDateTime.now();
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -74,6 +82,10 @@ public class AuthenticationService {
         return AuthenticationResponse.builder()
                 .accessToken(jwtToken)
 				.refreshToken(refreshToken)
+				.username(user.getUsername())
+				.role(user.getRole())
+				.jwtExpiredAt(now.plus(86400000, ChronoUnit.MILLIS))
+				.refreshExpiredAt(now.plus(2629800000L, ChronoUnit.MILLIS))
                 .build();
     }
 

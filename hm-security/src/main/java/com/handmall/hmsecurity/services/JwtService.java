@@ -8,8 +8,6 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.handmall.hmsecurity.entities.User;
-
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -20,8 +18,10 @@ import java.util.function.Function;
 public class JwtService {
 
     private static final String SECRET_KEY = "423F4528482B4D6250655368566D597133743677397A24432646294A404E635266546A576E5A7234753778214125442A472D4B6150645367566B587032733576";
-    private static final long jwtExpiration = 60000;
-    private static final long refreshExpiration = 604800000;
+    // expiration in 1 day
+    private static final long jwtExpiration = 86400000;
+    // expiration in 1 month
+    private static final long refreshExpiration = 2629800000L;
 
     public String extractUsername(String jwt) {
         return extractClaim(jwt, Claims::getSubject);
