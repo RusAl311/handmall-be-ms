@@ -21,22 +21,27 @@ import lombok.RequiredArgsConstructor;
 public class DepartmentController {
     private final DepartmentService departmentService;
 
-    @GetMapping
+    @GetMapping("/getAll")
     public List<Department> getDepartments() {
         return departmentService.getDepartments();
     }
 
-    @PostMapping
+    @GetMapping("/get/{departmentId}")
+    public Department getDepartment(@PathVariable("departmentId") Integer departmentId) {
+        return departmentService.getDepartment(departmentId);
+    }
+
+    @PostMapping("/addNew")
     public void addNewDepartment(@RequestBody Department department) {
         departmentService.addNew(department);
     }
 
-    @DeleteMapping(path = "{departmentId}")
+    @DeleteMapping("/delete/{departmentId}")
     public void deleteDepartment(@PathVariable("departmentId") Integer departmentId) {
         departmentService.delete(departmentId);
     }
 
-    @PutMapping
+    @PutMapping("/update/{departmentId}")
     public void updateDepartment(@RequestBody Department department) {
         departmentService.update(department);
     }

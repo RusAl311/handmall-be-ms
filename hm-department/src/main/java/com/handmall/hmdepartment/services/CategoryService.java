@@ -5,28 +5,54 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.handmall.hmdepartment.dtos.Category.CategoryRequest;
+import com.handmall.hmdepartment.dtos.Category.CategoryResponse;
 import com.handmall.hmdepartment.entities.Category;
+import com.handmall.hmdepartment.mappers.CategoryMapper;
 import com.handmall.hmdepartment.repositories.CategoryRepository;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final CategoryMapper categoryMapper;
 
-    public List<Category> getCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryResponse> getCategories() {
+        return categoryMapper.toCategoryList(categoryRepository.findAll());
     }
 
-    public void addNew(Category category) {
+    public CategoryResponse getCategory(Integer categoryId) throws NotFoundException {
+        Optional<Category> category = categoryRepository.findById(categoryId);
+
+        if (category.isEmpty()) {
+            throw new NotFoundException("category not found");
+        }
+
+        return categoryMapper.toCategory(category.get());
+    }
+
+    public void addNew(CategoryRequest categoryRequest) {
         Optional<Category> categoryByName = categoryRepository
-                .findCategoryByName(category.getName());
+                .findCategoryByName(categoryRequest.name());
 
         if (categoryByName.isPresent()) {
             throw new IllegalStateException("name is exist");
         }
-        categoryRepository.save(category);
+
+        categoryRepository.save(categoryMapper.toCategoryRequest(categoryRequest));
+    }
+
+    public void update(CategoryRequest categoryRequest) {
+        Optional<Category> updateCategoryRow = categoryRepository.findById(categoryRequest.id());
+
+        if (updateCategoryRow.isPresent()) {
+            categoryRepository.save(categoryMapper.toCategoryRequest(categoryRequest));
+        } else {
+            throw new IllegalStateException("category with id " + categoryRequest.id() + " does not exist");
+        }
     }
 
     public void delete(Integer categoryId) {

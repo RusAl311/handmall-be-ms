@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.handmall.hmdepartment.entities.Department;
 import com.handmall.hmdepartment.repositories.DepartmentRepository;
 
+import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -17,6 +18,16 @@ public class DepartmentService {
 
     public List<Department> getDepartments() {
         return departmentRepository.findAll();
+    }
+
+    public Department getDepartment(Integer departmentId) throws NotFoundException {
+        Optional<Department> department = departmentRepository.findById(departmentId);
+
+        if (department.isEmpty()) {
+            throw new NotFoundException("department not found");
+        }
+
+        return department.get();
     }
 
     public void addNew(Department department) {
