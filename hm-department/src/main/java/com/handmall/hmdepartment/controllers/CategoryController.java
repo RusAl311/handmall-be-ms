@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.handmall.hmdepartment.dtos.Category.CategoryRequest;
 import com.handmall.hmdepartment.dtos.Category.CategoryResponse;
-import com.handmall.hmdepartment.entities.Category;
 import com.handmall.hmdepartment.services.CategoryService;
 
 import jakarta.ws.rs.NotFoundException;
