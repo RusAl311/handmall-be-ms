@@ -24,6 +24,30 @@ services:
       POSTGRES_PASSWORD: admin123
       POSTGRES_DB: hm-department
 
+  db-hm-vendor:
+    image: postgres:12
+    restart: always
+    ports:
+      - 5456:5432
+    networks:
+      - handmall-network
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: hm-vendor
+
+  db-hm-product:
+    image: postgres:12
+    restart: always
+    ports:
+      - 5457:5432
+    networks:
+      - handmall-network
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: hm-product
+
   db-admin-handmall-api:
     image: adminer
     restart: always
