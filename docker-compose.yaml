@@ -2,9 +2,10 @@ version: '3'
 services:
   db-hm-security:
     image: postgres:12
+    container_name: db-security
     restart: always
     ports:
-      - 5454:5432
+      - "5454:5432"
     networks:
       - handmall-network
     environment:
@@ -14,9 +15,10 @@ services:
 
   db-hm-department:
     image: postgres:12
+    container_name: db-department
     restart: always
     ports: 
-      - 5455:5432
+      - "5455:5432"
     networks:
       - handmall-network
     environment: 
@@ -26,9 +28,10 @@ services:
 
   db-hm-vendor:
     image: postgres:12
+    container_name: db-vendor
     restart: always
     ports:
-      - 5456:5432
+      - "5456:5432"
     networks:
       - handmall-network
     environment:
@@ -38,9 +41,10 @@ services:
 
   db-hm-product:
     image: postgres:12
+    container_name: db-product
     restart: always
     ports:
-      - 5457:5432
+      - "5457:5432"
     networks:
       - handmall-network
     environment:
@@ -50,17 +54,32 @@ services:
 
   db-admin-handmall-api:
     image: adminer
+    container_name: db-admin
     restart: always
     ports:
-      - 8831:8080
+      - "8831:8080"
     networks:
       - handmall-network
 
   hm-zipkin:
     image: openzipkin/zipkin
+    container_name: hm-zipkin
     restart: always
     ports:
-      - 9411:9411
+      - "9411:9411"
+    networks:
+      - handmall-network
+
+  hm-rabbitmq:
+    image: rabbitmq:3.12.1-management-alpine
+    container_name: hm-rabbitmq
+    restart: on-failure
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+    ports:
+      - "5672:5672"
+      - "15672:15672"
     networks:
       - handmall-network
   
