@@ -40,17 +40,17 @@ services:
       POSTGRES_DB: hm-vendor
 
   db-hm-product:
-    image: postgres:12
+    image: mongo:6
     container_name: db-product
     restart: always
     ports:
-      - "5457:5432"
+      - "5457:27017"
     networks:
       - handmall-network
     environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: admin123
-      POSTGRES_DB: hm-product
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: admin123
+      MONGO_INITDB_DATABASE: hm-product
 
   db-admin-handmall-api:
     image: adminer
