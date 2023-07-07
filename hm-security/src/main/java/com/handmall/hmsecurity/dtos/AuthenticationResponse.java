@@ -16,10 +16,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AuthenticationResponse {
-    
+
     @JsonProperty("accessToken")
     private String accessToken;
-    
+
     @JsonProperty("refreshToken")
     private String refreshToken;
 
@@ -27,10 +27,8 @@ public class AuthenticationResponse {
 
     private Role role;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime jwtExpiredAt;
+    private Long jwtExpiredAt;
 
-    @JsonFormat(pattern = "dd-MM-yyyy HH:mm")
-    private LocalDateTime refreshExpiredAt;
-    
+    private Long refreshExpiredAt;
+
 }
