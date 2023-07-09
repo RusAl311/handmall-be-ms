@@ -24,6 +24,12 @@ public class ProductService {
         return productMapper.toProductList(productRepository.findAll());
     }
 
+    public List<ProductResponse> getProductsByCategory(Integer categoryId) {
+        Optional<List<Product>> productsByCategory = productRepository.findByCategory(categoryId);
+        List<Product> products = productsByCategory.get();
+        return productMapper.toProductList(products);
+    }
+
     public ProductResponse getProduct(String productId) throws NotFoundException {
         Optional<Product> product = productRepository.findById(productId);
 

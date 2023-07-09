@@ -1,7 +1,8 @@
 package com.handmall.hmproduct.dtos;
 
 public record ProductRequest(
-                                String name
+                                String name,
+                                Integer categoryId
 ) {
     
 }

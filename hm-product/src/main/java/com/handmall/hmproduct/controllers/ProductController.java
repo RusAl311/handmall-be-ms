@@ -28,6 +28,11 @@ public class ProductController {
         return productService.getProducts();
     }
 
+    @GetMapping("/getAllByCategory/{categoryId}")
+    public List<ProductResponse> getProductsByCategory(@PathVariable("categoryId") Integer categoryId) {
+        return productService.getProductsByCategory(categoryId);
+    }
+
     @GetMapping("/get/{productId}")
     public ProductResponse getProduct(@PathVariable("productId") String productId) throws NotFoundException {
         return productService.getProduct(productId);
