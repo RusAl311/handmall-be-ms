@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.handmall.hmdepartment.dtos.Department.DepartmentRequest;
+import com.handmall.hmdepartment.dtos.Department.DepartmentResponse;
 import com.handmall.hmdepartment.entities.Department;
 import com.handmall.hmdepartment.services.DepartmentService;
 
@@ -22,18 +24,18 @@ public class DepartmentController {
     private final DepartmentService departmentService;
 
     @GetMapping("/getAll")
-    public List<Department> getDepartments() {
+    public List<DepartmentResponse> getDepartments() {
         return departmentService.getDepartments();
     }
 
     @GetMapping("/get/{departmentId}")
-    public Department getDepartment(@PathVariable("departmentId") Integer departmentId) {
+    public DepartmentResponse getDepartment(@PathVariable("departmentId") Integer departmentId) {
         return departmentService.getDepartment(departmentId);
     }
 
     @PostMapping("/addNew")
-    public void addNewDepartment(@RequestBody Department department) {
-        departmentService.addNew(department);
+    public void addNewDepartment(@RequestBody DepartmentRequest departmentRequest) {
+        departmentService.addNew(departmentRequest);
     }
 
     @DeleteMapping("/delete/{departmentId}")
@@ -42,7 +44,8 @@ public class DepartmentController {
     }
 
     @PutMapping("/update/{departmentId}")
-    public void updateDepartment(@RequestBody Department department) {
-        departmentService.update(department);
+    public void updateDepartment(@RequestBody DepartmentRequest departmentRequest,
+            @PathVariable("departmentId") Integer departmentId) {
+        departmentService.update(departmentRequest, departmentId);
     }
 }

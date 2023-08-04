@@ -5,7 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.handmall.hmdepartment.dtos.Department.DepartmentRequest;
+import com.handmall.hmdepartment.dtos.Department.DepartmentResponse;
 import com.handmall.hmdepartment.entities.Department;
+import com.handmall.hmdepartment.mappers.DepartmentMapper;
 import com.handmall.hmdepartment.repositories.DepartmentRepository;
 
 import jakarta.ws.rs.NotFoundException;
@@ -15,29 +18,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class DepartmentService {
     private final DepartmentRepository departmentRepository;
+    private final DepartmentMapper departmentMapper;
 
-    public List<Department> getDepartments() {
-        return departmentRepository.findAll();
+    public List<DepartmentResponse> getDepartments() {
+        return departmentMapper.toDepartmentList(departmentRepository.findAll());
     }
 
-    public Department getDepartment(Integer departmentId) throws NotFoundException {
+    public DepartmentResponse getDepartment(Integer departmentId) throws NotFoundException {
         Optional<Department> department = departmentRepository.findById(departmentId);
 
         if (department.isEmpty()) {
             throw new NotFoundException("department not found");
         }
 
-        return department.get();
+        return departmentMapper.toDepartment(department.get());
     }
 
-    public void addNew(Department department) {
+    public void addNew(DepartmentRequest departmentRequest) {
         Optional<Department> departmentByName = departmentRepository
-                .findDepartmentByName(department.getName());
-        
+                .findDepartmentByName(departmentRequest.name());
+
         if (departmentByName.isPresent()) {
             throw new IllegalStateException("name is exist");
         }
-        departmentRepository.save(department);
+        departmentRepository.save(departmentMapper.toDepartmentRequest(departmentRequest));
     }
 
     public void delete(Integer departmentId) {
@@ -48,16 +52,20 @@ public class DepartmentService {
         departmentRepository.deleteById(departmentId);
     }
 
-    public void update(Department department) {
-        Optional<Department> updatedDepartmentRow = departmentRepository.findById(department.getId());
-        if (updatedDepartmentRow.isPresent()) {
-            Department updatedDepartment = updatedDepartmentRow.get();
-            if (!department.getName().isEmpty()) {
-                updatedDepartment.setName(department.getName());
-            }
-            departmentRepository.save(updatedDepartment);
-        } else {
-            throw new IllegalStateException("department with id " + department.getId() + " does not exist");
+    public void update(DepartmentRequest departmentRequest, Integer departmentId) {
+        Optional<Department> departmentById = departmentRepository.findById(departmentId);
+
+        if (departmentById.isEmpty()) {
+            throw new IllegalStateException("department with id " + departmentId + " does not exist");
         }
+
+        var department = Department
+                .builder()
+                .id(departmentId)
+                .name(departmentRequest.name())
+                .description(departmentRequest.description())
+                .build();
+
+        departmentRepository.save(department);
     }
 }
