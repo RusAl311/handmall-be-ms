@@ -20,10 +20,13 @@ public class SwaggerConfig {
     @GetMapping("/swagger-config.json")
     public Map<String, Object> swaggerConfig() {
         List<SwaggerUrl> urls = new LinkedList<>();
-        discoveryClient.getServices().forEach(serviceName ->
-                discoveryClient.getInstances(serviceName)
-                        .forEach(serviceInstance -> urls.add(new SwaggerUrl("serviceName", serviceInstance.getUri() + "/v3/api-docs", "serviceName")))
-        );
+        discoveryClient
+                .getServices()
+                .forEach(serviceId -> discoveryClient
+                        .getInstances(serviceId)
+                        .forEach(serviceInstance -> urls
+                                .add(new SwaggerUrl("serviceId", serviceInstance.getUri() + "/v3/api-docs",
+                                        "serviceId"))));
         return Map.of("urls", urls);
     }
 }
