@@ -8,8 +8,10 @@ import org.springframework.stereotype.Service;
 import com.handmall.hmdepartment.dtos.Category.CategoryRequest;
 import com.handmall.hmdepartment.dtos.Category.CategoryResponse;
 import com.handmall.hmdepartment.entities.Category;
+import com.handmall.hmdepartment.entities.Department;
 import com.handmall.hmdepartment.mappers.CategoryMapper;
 import com.handmall.hmdepartment.repositories.CategoryRepository;
+import com.handmall.hmdepartment.repositories.DepartmentRepository;
 
 import jakarta.ws.rs.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CategoryService {
     private final CategoryRepository categoryRepository;
+    private final DepartmentRepository departmentRepository;
     private final CategoryMapper categoryMapper;
 
     public List<CategoryResponse> getCategories() {
@@ -45,14 +48,25 @@ public class CategoryService {
         categoryRepository.save(categoryMapper.toCategoryRequest(categoryRequest));
     }
 
-    public void update(CategoryRequest categoryRequest) {
-        Optional<Category> updateCategoryRow = categoryRepository.findById(categoryRequest.id());
+    public void update(CategoryRequest categoryRequest, Integer categoryId) {
+        Optional<Category> categoryById = categoryRepository.findById(categoryId);
 
-        if (updateCategoryRow.isPresent()) {
-            categoryRepository.save(categoryMapper.toCategoryRequest(categoryRequest));
-        } else {
-            throw new IllegalStateException("category with id " + categoryRequest.id() + " does not exist");
+        if (categoryById.isEmpty()) {
+            throw new IllegalStateException("category with id " + categoryId + " does not exist");
         }
+
+        Optional<Department> department = departmentRepository.findById(categoryRequest.departmentId());
+
+        var category = Category
+                .builder()
+                .id(categoryId)
+                .name(categoryRequest.name())
+                .description(categoryRequest.description())
+                .department(department.get())
+                .build();
+
+        categoryRepository.save(category);
+
     }
 
     public void delete(Integer categoryId) {
